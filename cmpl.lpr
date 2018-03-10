@@ -32,12 +32,12 @@ begin
 end;
 
 var
-    lexer : TLnfwLexer;
+    lexer : TLfnwLexer;
     src : AnsiString;
 
 begin
 
-  lexer := TLnfwLexer.Create();
+  lexer := TLfnwLexer.Create();
 
   src := ReadTextFile(ParamStr(1));
   WriteLn('File: ', ParamStr(1));

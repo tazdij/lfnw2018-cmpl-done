@@ -9,11 +9,14 @@ uses Classes, SysUtils, StrUtils;
 type
     PDFAToken = ^TDFAToken;
     TDFAToken = record
-        TokenId : String[20];
+        TokenId : Integer;
         TokenVal : AnsiString;
+        TokenName: AnsiString;
         TokenCharStart : Integer;
         TokenLine : Integer;
     end;
+
+    TDFATokenHandler = procedure(ADfaToken : PDFAToken) of object;
 
     TDFAComparator = class(TObject)
         public
@@ -39,6 +42,28 @@ type
             constructor Create(ACharList : Array of AnsiString);
             destructor Destroy(); Override;
             
+            procedure Free(); Override;
+            function Compare(AInput : AnsiString) : Boolean; Override;
+    end;
+
+    TDFAComp_Is = class(TDFAComparator)
+        private
+            FChar : AnsiString;
+        public
+            constructor Create(AChar : AnsiString);
+            destructor Destroy(); Override;
+
+            procedure Free(); Override;
+            function Compare(AInput : AnsiString) : Boolean; Override;
+    end;
+
+    TDFAComp_IsNot = class(TDFAComparator)
+        private
+            FChar : AnsiString;
+        public
+            constructor Create(AChar : AnsiString);
+            destructor Destroy(); Override;
+
             procedure Free(); Override;
             function Compare(AInput : AnsiString) : Boolean; Override;
     end;
@@ -88,6 +113,8 @@ type
             constructor Create(AComparator : TDFAComparator; ADestination : TDFAState; AAddToBuffer : Boolean = True; AReprocess : Boolean = False);
             destructor Destroy(); Override;
     end;
+
+    TCharDFA = class;
     
     TDFAState = class(TObject)
         private
@@ -95,11 +122,16 @@ type
             FName : AnsiString;
             FIdent : AnsiString;
             FTokenId : Integer;
+            FDfa : TCharDFA;
+
+            function GetIsLeaf() : Boolean;
         public
-            function ProcessChar(c : AnsiString) : Boolean;
+            function ProcessChar(c : AnsiString;  var reprocess : Boolean) : Boolean;
             procedure AddDelta(delta : TDFADelta);
             constructor Create(AName : AnsiString; AIdent : AnsiString; ATokenId : Integer);
             destructor Destroy(); Override;
+
+            property IsLeaf : Boolean read GetIsLeaf;
             
             
     end;
@@ -108,6 +140,9 @@ type
         private
             FStates : Array of TDFAState;
             FCurState : TDFAState;
+            FStartState : TDFAState;
+            FBuffer : AnsiString;
+            FTokenHandler : TDFATokenHandler;
         protected
             
         public
@@ -115,7 +150,8 @@ type
             destructor Destroy(); Override;
             
             procedure AddState(state : TDFAState);
-            function nextChar(c : AnsiString) : Boolean;
+            procedure SetTokenHandler(handler : TDFATokenHandler);
+            function nextChar(c : AnsiString; var reprocess : Boolean) : Boolean;
     end;
 
 implementation
@@ -131,7 +167,7 @@ begin
 
     for el in ACharList do
     begin
-       Self.FCharList[i] := el;
+       Self.FCharList[i] := Copy(el, 1, 1);
        Inc(i); 
     end;
 
@@ -174,7 +210,7 @@ begin
 
     for el in ACharList do
     begin
-       Self.FCharList[i] := el;
+       Self.FCharList[i] := Copy(el, 1, 1);
        Inc(i); 
     end;
 
@@ -205,6 +241,63 @@ begin
         end;
     end;
 end;
+
+constructor TDFAComp_Is.Create(AChar : AnsiString);
+begin
+    inherited Create();
+
+    self.FChar := AChar;
+end;
+
+destructor TDFAComp_Is.Destroy();
+begin
+    inherited Destroy();
+end;
+
+procedure TDFAComp_Is.Free();
+begin
+    Self.FChar := '';
+end;
+
+function TDFAComp_Is.Compare(AInput : AnsiString) : Boolean;
+var
+    el : AnsiString;
+begin
+    Result := True;
+
+    if AnsiCompareStr(AInput, FChar) <> 0 then
+        Result := False;
+end;
+
+
+constructor TDFAComp_IsNot.Create(AChar : AnsiString);
+begin
+    inherited Create();
+
+    self.FChar := AChar;
+end;
+
+destructor TDFAComp_IsNot.Destroy();
+begin
+    inherited Destroy();
+end;
+
+procedure TDFAComp_IsNot.Free();
+begin
+    Self.FChar := '';
+end;
+
+function TDFAComp_IsNot.Compare(AInput : AnsiString) : Boolean;
+var
+    el : AnsiString;
+begin
+    Result := True;
+
+    if AnsiCompareStr(AInput, FChar) = 0 then
+        Result := False;
+end;
+
+
 
 constructor TDFAComp_And.Create(AComps : Array of TDFAComparator);
 var i : Integer;
@@ -316,7 +409,9 @@ end;
 
 constructor TDFAState.Create(AName : AnsiString; AIdent : AnsiString; ATokenId : Integer);
 begin
-
+     FName := AName;
+     FIdent := AIdent;
+     FTokenId := ATokenId;
 end;
 
 destructor TDFAState.Destroy();
@@ -332,7 +427,15 @@ begin
     inherited Destroy();
 end;
 
-function TDFAState.ProcessChar(c : AnsiString) : Boolean;
+function TDFAState.GetIsLeaf() : Boolean;
+begin
+    Result := False;
+
+    if Length(self.FDeltas) = 0 then
+       Result := True;
+end;
+
+function TDFAState.ProcessChar(c : AnsiString; var reprocess : Boolean) : Boolean;
 var delta : TDFADelta;
 begin
     Result := False;
@@ -342,6 +445,24 @@ begin
       if delta.FComparator.Compare(c) then
       begin
           Result := True;
+
+          (* We need to handle the transition *)
+          if delta.FReprocess then
+          begin
+              (* Handle reversing the buffer, somehow *)
+              reprocess := True;
+          end;
+
+          if delta.FAddToBuffer then
+          begin
+              (* Add the current character to the DFA Buffer for current token *)
+              self.FDfa.FBuffer := self.FDfa.FBuffer + c;
+          end;
+
+          (* Move to Dest state *)
+          self.FDfa.FCurState := delta.FDestination;
+
+
           Exit;
       end;
     end;
@@ -387,13 +508,50 @@ begin
 
     if not Assigned(self.FCurState) then
        self.FCurState := state;
+
+    if not Assigned(self.FStartState) then
+       self.FStartState := state;
+
+    // Put a reference to this DFA in the state (used for changing current state)
+    state.FDfa := self;
 end;
 
-function TCharDFA.nextChar(c : AnsiString) : Boolean;
+procedure TCharDFA.SetTokenHandler(handler : TDFATokenHandler);
+begin
+    self.FTokenHandler := handler;
+end;
+
+function TCharDFA.nextChar(c : AnsiString; var reprocess : Boolean) : Boolean;
+var
+    pToken : PDFAToken;
 begin
 
     (* Test each Delta in the current state, if it can process this char *)
-    Result := FCurState.ProcessChar(c);
+    Result := FCurState.ProcessChar(c, reprocess);
+
+    if Result = True then
+    begin
+        (* Test if state is a leaf *)
+        if self.FCurState.IsLeaf then
+        begin
+            (* This is a dead end, it is time to generate a token, clear buffer, and got to StartState *)
+            New(pToken);
+
+            pToken^.TokenName := self.FCurState.FName;
+            pToken^.TokenId := self.FCurState.FTokenId;
+            pToken^.TokenVal := Copy(self.FBuffer, 1, Length(self.FBuffer));
+
+            self.FTokenHandler(pToken);
+
+            Dispose(pToken);
+
+            self.FBuffer := '';
+
+            (* Go Back to StartState *)
+            self.FCurState := self.FStartState;
+        end;
+    end;
+
     (* return if the char was processed correctly *)
     //Result := True;
 end;

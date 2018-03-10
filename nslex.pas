@@ -20,24 +20,28 @@ type
 
         ELfnwLexReg);
     
-    PLnfwLexToken = ^TLnfwLexToken;
-    TLnfwLexToken = record
-        Name : String[4];
+    PLfnwLexToken = ^TLfnwLexToken;
+    TLfnwLexToken = record
+        TokenType : ELexTokenType;
+        Name : AnsiString;
         LexValue : AnsiString;
         LineNum : Cardinal;
         CharNum : Cardinal;
     end;
     
-    TLnfwLexTokenArray = Array of TLnfwLexToken;
+    TLfnwLexTokenArray = Array of TLfnwLexToken;
     
-    TLnfwLexer = class(TObject)
+    TLfnwLexer = class(TObject)
         private
             FDfa : TCharDFA;
+            FCurChar, FCurLine: Cardinal;
         public
             constructor Create();
             destructor Destroy(); Override;
+
+            procedure HandleDFAToken(token : PDFAToken);
             
-            function Lex(s : AnsiString) : TLnfwLexTokenArray;
+            function Lex(s : AnsiString) : TLfnwLexTokenArray;
     end;
 
 implementation
@@ -58,10 +62,10 @@ var
         'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 
         'U', 'V', 'W', 'X', 'Y', 'Z');
 
-    WhitespaceCL : Array[0..2] of AnsiString = (#13, #10, #7);
+    WhitespaceCL : Array[0..3] of AnsiString = (#13, #10, #7, #32);
 
 
-constructor TLnfwLexer.Create();
+constructor TLfnwLexer.Create();
 var
     tmpComp : TDFAComparator;
     
@@ -69,31 +73,51 @@ var
     CompArray : Array of TDFAComparator;
     OrComp : TDFAComparator;
 
-    StartState, OpState, LabelState,
-    CommentState, WhitespaceState : TDFAState;
+    StartState, WhitespaceState,
+    OpState, OpEndState,
+    LabelState, LabelEndState,
+    CommentState, CommentEndState : TDFAState;
 
-    WhitespaceDelta : TDFADelta;
 begin
     FDfa := TCharDFA.Create();
+
+    (* Assign the LexToken Generator *)
+    FDfa.SetTokenHandler(@Self.HandleDFAToken);
     
     (* configure DFA to Lex LnfwSource *)
     StartState := TDFAState.Create('START', 'START', Integer(ELfnwLexNone));
     WhitespaceState := TDFAState.Create('WHITESPACE', 'WS', Integer(ELfnwLexNone));
     CommentState := TDFAState.Create('COMMENT', 'CMNT', Integer(ELfnwLexComment));
+    CommentEndState := TDFAState.Create('COMMENT', 'CMNT', Integer(ELfnwLexComment));
 
     OpState := TDFAState.Create('OP', 'OP', Integer(ELfnwLexOp));
+    OpEndState := TDFAState.Create('OP', 'OP', Integer(ELfnwLexOp));
     LabelState := TDFAState.Create('LABEL', 'LABEL', Integer(ELfnwLexLabel));
 
 
-    FDfa.addState(StartState);
+    FDfa.addState(StartState); (* Must add the First "Start" State, before all others *)
     FDfa.addState(WhitespaceState);
     FDfa.addState(CommentState);
+    Fdfa.AddState(CommentEndState);
     FDfa.addState(OpState);
+    FDfa.AddState(OpEndState);
     FDfa.addState(LabelState);
 
 
     (* Loop whitespace back to start, we don't care about it *)
     StartState.AddDelta(TDFADelta.Create(TDFAComp_IsIn.Create(WhitespaceCL), StartState, False));
+
+    (* Handle comments *)
+    StartState.AddDelta(TDFADelta.Create(TDFAComp_Is.Create(';'), CommentState, False));
+    CommentState.AddDelta(TDFADelta.Create(TDFAComp_IsNot.Create(#10), CommentState));
+    CommentState.AddDelta(TDFADelta.Create(TDFAComp_Is.Create(#10), CommentEndState, False));
+
+    (* Handle Ops *)
+    StartState.AddDelta(TDFADelta.Create(TDFAComp_IsIn.Create(UpperAlphaCL), OpState));
+    OpState.AddDelta(TDFADelta.Create(TDFAComp_IsIn.Create(UpperAlphaCL), OpState));
+    OpState.AddDelta(TDFADelta.Create(TDFAComp_IsNotIn.Create(UpperAlphaCL), OpEndState, False, True));
+
+
 
 
     
@@ -138,18 +162,25 @@ begin
 end;
 
 
-destructor TLnfwLexer.Destroy();
+destructor TLfnwLexer.Destroy();
 begin
     FreeAndNil(Fdfa);
     
     inherited Destroy();
 end;
 
-function TLnfwLexer.Lex(s : AnsiString) : TLnfwLexTokenArray;
+procedure TLfnwLexer.HandleDFAToken(token : PDFAToken);
+begin
+  WriteLn('#TOKEN: ', token^.TokenName, ' -> ', token^.TokenVal);
+
+end;
+
+function TLfnwLexer.Lex(s : AnsiString) : TLfnwLexTokenArray;
 var
     len : Integer;
     curCodePoint : AnsiString;
     curP, endP : PChar;
+    reprocessCodePoint : Boolean;
     
     curCharNum : Cardinal = 0;
     curLineNum : Cardinal = 1;
@@ -178,11 +209,21 @@ begin
             WriteLn('Line: ', curLineNum, ', Char: ', curCharNum, ', => ', curCodePoint);
         end;
         //Write(curCodePoint);
+
+        reprocessCodePoint := False;
         
         (* Pass char into dfa state *)
-        self.FDfa.nextChar(curCodePoint);
-        
-        Inc(curP, len);
+        if not self.FDfa.nextChar(curCodePoint, reprocessCodePoint) then
+        begin
+            WriteLn('Error: no debugging info yet.');
+        end;
+
+        if not reprocessCodePoint then
+            Inc(curP, len)
+        else
+        begin
+
+        end;
     end;
     SetLength(Result, 0);
 
