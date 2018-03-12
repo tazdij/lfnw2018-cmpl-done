@@ -7,7 +7,7 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  SysUtils, chardfa, nslex;
+  SysUtils, chardfa, nslex, booty, bingen;
 
 function ReadTextFile(path : AnsiString) : AnsiString;
 var
@@ -34,6 +34,7 @@ end;
 var
     lexer : TLfnwLexer;
     src : AnsiString;
+    tokens : TLfnwLexTokenArray;
 
 begin
 
@@ -43,7 +44,7 @@ begin
   WriteLn('File: ', ParamStr(1));
   WriteLn(src);
 
-  lexer.Lex(src);
+  tokens := lexer.Lex(src);
 
   FreeAndNil(lexer);
   src := '';
