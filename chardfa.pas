@@ -4,7 +4,7 @@ unit chardfa;
 
 interface
 
-uses Classes, SysUtils, StrUtils;
+uses Classes, SysUtils;
 
 type
     PDFAToken = ^TDFAToken;
@@ -89,16 +89,6 @@ type
             procedure Free(); Override;
             function Compare(AInput : AnsiString) : Boolean; Override;
     end;
-    
-    (* TDFAComp_None class(TDFAComparator)
-        private
-            FComparators : Array of TDFAComparator;
-        public
-            constructor Create(AComps : Array of TDFAComparator);
-            destructor Destroy(); Override;
-            
-            function Compare(AInput : AnsiString) : Boolean; Override;
-    end; *)
     
     TDFAState = class;
 

@@ -67,12 +67,6 @@ var
 
 constructor TLfnwLexer.Create();
 var
-    tmpComp : TDFAComparator;
-    
-    CompList : TDFAComp_IsIn;
-    CompArray : Array of TDFAComparator;
-    OrComp : TDFAComparator;
-
     StartState, WhitespaceState,
     RegisterState, RegisterNumberState, RegisterEndState,
     OpState, OpEndState,

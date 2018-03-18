@@ -7,7 +7,7 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  SysUtils, chardfa, nslex, booty, bingen;
+  SysUtils, StrUtils, chardfa, nslex, booty, bingen, lexdfa;
 
 function ReadTextFile(path : AnsiString) : AnsiString;
 var
@@ -35,10 +35,17 @@ var
     lexer : TLfnwLexer;
     src : AnsiString;
     tokens : TLfnwLexTokenArray;
+    parser : TLfnwParseGen;
+
+    outBytes : TBytes;
+
+    testInt : Integer;
+    testBytes : Array[0..3] of Byte;
 
 begin
 
   lexer := TLfnwLexer.Create();
+  parser := TLfnwParseGen.Create();
 
   src := ReadTextFile(ParamStr(1));
   WriteLn('File: ', ParamStr(1));
@@ -46,7 +53,18 @@ begin
 
   tokens := lexer.Lex(src);
 
+  testInt := Hex2Dec('000000A1');
+  Move(testInt, testBytes[0], 4);
+
+  WriteLn('Hex 2 Dec:');
+  WriteLn('00 00 00 01 = ', testInt);
+  WriteLn('Bytes: ', testBytes[0], ' ', testBytes[1], ' ', testBytes[2], ' ', testBytes[3]);
+
+  parser.Run(tokens);
+
+
   FreeAndNil(lexer);
+  FreeAndNil(parser);
   src := '';
 
 end.
