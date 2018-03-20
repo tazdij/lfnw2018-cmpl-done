@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="9"/>
     <BuildModes Active="Default"/>
-    <Units Count="13">
+    <Units Count="12">
       <Unit0>
         <Filename Value="cmpl.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -77,19 +77,19 @@
       <Unit8>
         <Filename Value="booty.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="67"/>
-        <CursorPos X="35" Y="101"/>
+        <TopLine Value="139"/>
+        <CursorPos X="30" Y="165"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit8>
       <Unit9>
         <Filename Value="bingen.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <TopLine Value="83"/>
-        <CursorPos Y="101"/>
+        <CursorPos X="40" Y="117"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit9>
@@ -97,9 +97,9 @@
         <Filename Value="lexdfa.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="687"/>
-        <CursorPos X="51" Y="34"/>
-        <UsageCount Value="116"/>
+        <TopLine Value="623"/>
+        <CursorPos X="13" Y="640"/>
+        <UsageCount Value="197"/>
         <Loaded Value="True"/>
       </Unit10>
       <Unit11>
@@ -108,15 +108,8 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="5"/>
         <CursorPos Y="22"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="1"/>
       </Unit11>
-      <Unit12>
-        <Filename Value="/usr/share/fpcsrc/3.0.0/rtl/objpas/sysutils/sysutilh.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="87"/>
-        <CursorPos X="4" Y="104"/>
-        <UsageCount Value="8"/>
-      </Unit12>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>

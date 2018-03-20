@@ -636,6 +636,9 @@ begin
               //self.FDfa.FBuffer := self.FDfa.FBuffer + c;
           end;
 
+          (* TEMP: Print Token Value *)
+          //WriteLn(tok^.TokenName, ' ', tok^.TokenVal);
+
           (* Move to Dest state *)
           self.FDfa.FCurState := delta.FDestination;
 

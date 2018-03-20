@@ -27,6 +27,9 @@ type
       procedure VM_OpHALT(ADfaTokens : TDFATokenArray);
       procedure VM_OpMOVRIl(ADfaTokens : TDFATokenArray);
       procedure VM_OpMOVHIl(ADfaTokens : TDFATokenArray);
+      procedure VM_OpMOVHHBx(ADfaTokens : TDFATokenArray);
+
+      procedure VM_OpPRINTI(ADfaTokens : TDFATokenArray);
 
       //procedure FreeLabels();
       //procedure NewLabel(id : AnsiString);
@@ -60,13 +63,27 @@ end;
 procedure TLfnwParseGen.VM_OpMOVHIl(ADfaTokens : TDFATokenArray);
 begin
   WriteLn('MOVHIl.');
-  self.FBinGen.WriteByte(1); // Write 01, OpCode for MOV (RIl)
+  self.FBinGen.WriteByte(1); // Write 01, OpCode for MOV (HIl)
   self.FBinGen.WriteHexStrBEtoLE(ADfaTokens[1].TokenVal);
   self.FBinGen.WriteHexStrBEtoLE(ADfaTokens[2].TokenVal);
 end;
 
-(* Handle PRINT *)
+procedure TLfnwParseGen.VM_OpMOVHHBx(ADfaTokens : TDFATokenArray);
+begin
+  WriteLn('MOVHHBx.');
+  self.FBinGen.WriteByte(2); // Write 01, OpCode for MOV (HHBx)
+  self.FBinGen.WriteHexStrBEtoLE(ADfaTokens[1].TokenVal);
+  self.FBinGen.WriteHexStrBEtoLE(ADfaTokens[2].TokenVal);
+  self.FBinGen.WriteHexStrBEtoLE(ADfaTokens[3].TokenVal);
+end;
 
+(* Handle PRINT *)
+procedure TLfnwParseGen.VM_OpPRINTI(ADfaTokens : TDFATokenArray);
+begin
+  WriteLn('PRINTI.');
+  self.FBinGen.WriteByte(3);
+  self.FBinGen.WriteHexStrBEtoLE(ADfaTokens[1].TokenVal);
+end;
 
 procedure TLfnwParseGen.Run(ATokens : TLfnwLexTokenArray);
 var numTokens : Integer = 0;
@@ -109,7 +126,10 @@ var
     OpStartState,
     OpHALTState,
     OpMOVStartState, OpMOVRState, OpMOVRIlState,
-    OpMOVHState, OpMOVHState2, OpMOVHIlState : TDFAState;
+    OpMOVHState, OpMOVHState2, OpMOVHIlState,
+    OpMOVHHState, OpMOVHHBState, OpMOVHHBxState,
+
+    OpPRINTIStartState, OpPRINTIState: TDFAState;
 
 begin
   SetLength(self.FLabels, 0);
@@ -129,6 +149,11 @@ begin
   OpMOVHState := TDFAState.Create('MOVH', 'MOVH', @self.VM_OpNone);
   OpMOVHState2 := TDFAState.Create('MOVH2', 'MOVH2', @self.VM_OpNone);
   OpMOVHIlState := TDFAState.Create('MOVHIl', 'MOVHIl', @self.VM_OpMOVHIl);
+  OpMOVHHState := TDFAState.Create('MOVHH', 'MOVHH', @self.VM_OpNone);
+  OpMOVHHBState := TDFAState.Create('MOVHHB', 'MOVHHB', @self.VM_OpNone);
+  OpMOVHHBxState := TDFAState.Create('MOVHHBx', 'MOVHHBx', @self.VM_OpMOVHHBx);
+  OpPRINTIStartState := TDFAState.Create('PRINTIStart', 'PRINTIStart', @self.VM_OpNone);
+  OpPRINTIState := TDFAState.Create('PRINTI', 'PRINTI', @self.VM_OpPRINTI);
 
   self.FDfa.AddState(StartState);
   self.FDfa.AddState(CommentState);
@@ -140,16 +165,35 @@ begin
   self.FDfa.AddState(OpMOVHState);
   self.FDfa.AddState(OpMOVHState2);
   self.FDfa.AddState(OpMOVHIlState);
+  self.FDfa.AddState(OpMOVHHState);
+  self.FDfa.AddState(OpMOVHHBState);
+  self.FDfa.AddState(OpMOVHHBxState);
+  self.FDfa.AddState(OpPRINTIStartState);
+  self.FDfa.AddState(OpPRINTIState);
 
+  (* All OP Codes *)
   StartState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexOp)), OpStartState, False, True));
+
+  (* All Comments *)
   StartState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexComment)), CommentState));
 
+  (* Branch each OP Code By Name *)
   OpStartState.AddDelta(TDFADelta.Create(TDFAComp_ValIs.Create('HALT'), OpHALTState));
   OpStartState.AddDelta(TDFADelta.Create(TDFAComp_ValIs.Create('MOV'), OpMOVStartState));
 
+  (* MOVH* OP Codes *)
   OpMOVStartState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexAddr)), OpMOVHState, False));
   OpMOVHState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexHexLit)), OpMOVHState2));
+
+  (* MOVHIl Delta *)
   OpMOVHState2.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexHexLit)), OpMOVHIlState));
+
+  (* Add Delta for MOVHHBx Op - extends the MOVH *)
+  OpMOVHState2.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexAddr)), OpMOVHHState, False));
+  OpMOVHHState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexHexLit)), OpMOVHHBState));
+  OpMOVHHBState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexHexLit)), OpMOVHHBxState));
+
+
 
 
 end;
