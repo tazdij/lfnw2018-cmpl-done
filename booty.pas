@@ -29,7 +29,9 @@ type
       procedure VM_OpMOVHIl(ADfaTokens : TDFATokenArray);
       procedure VM_OpMOVHHBx(ADfaTokens : TDFATokenArray);
 
-      procedure VM_OpPRINTI(ADfaTokens : TDFATokenArray);
+      procedure VM_OpPRINTHOI(ADfaTokens : TDFATokenArray);
+      procedure VM_OpPRINTHOC(ADfaTokens : TDFATokenArray);
+
 
       //procedure FreeLabels();
       //procedure NewLabel(id : AnsiString);
@@ -57,7 +59,7 @@ end;
 
 procedure TLfnwParseGen.VM_OpMOVRIl(ADfaTokens : TDFATokenArray);
 begin
-  self.FBinGen.WriteByte(10); // Write 01, OpCode for MOV (RIl)
+  self.FBinGen.WriteByte(3); // Write 01, OpCode for MOV (RIl)
 end;
 
 procedure TLfnwParseGen.VM_OpMOVHIl(ADfaTokens : TDFATokenArray);
@@ -78,10 +80,17 @@ begin
 end;
 
 (* Handle PRINT *)
-procedure TLfnwParseGen.VM_OpPRINTI(ADfaTokens : TDFATokenArray);
+procedure TLfnwParseGen.VM_OpPRINTHOI(ADfaTokens : TDFATokenArray);
 begin
-  WriteLn('PRINTI.');
-  self.FBinGen.WriteByte(3);
+  WriteLn('PRINTHOI.');
+  self.FBinGen.WriteByte(4);
+  self.FBinGen.WriteHexStrBEtoLE(ADfaTokens[1].TokenVal);
+end;
+
+procedure TLfnwParseGen.VM_OpPRINTHOC(ADfaTokens : TDFATokenArray);
+begin
+  WriteLn('PRINTHOC.');
+  self.FBinGen.WriteByte(5);
   self.FBinGen.WriteHexStrBEtoLE(ADfaTokens[1].TokenVal);
 end;
 
@@ -129,7 +138,8 @@ var
     OpMOVHState, OpMOVHState2, OpMOVHIlState,
     OpMOVHHState, OpMOVHHBState, OpMOVHHBxState,
 
-    OpPRINTIStartState, OpPRINTIState: TDFAState;
+    OpPRINTIStartState, OpPRINTIHState, OpPRINTHOIState,
+    OpPRINTCStartState, OpPRINTCHState, OpPRINTHOCState : TDFAState;
 
 begin
   SetLength(self.FLabels, 0);
@@ -153,7 +163,11 @@ begin
   OpMOVHHBState := TDFAState.Create('MOVHHB', 'MOVHHB', @self.VM_OpNone);
   OpMOVHHBxState := TDFAState.Create('MOVHHBx', 'MOVHHBx', @self.VM_OpMOVHHBx);
   OpPRINTIStartState := TDFAState.Create('PRINTIStart', 'PRINTIStart', @self.VM_OpNone);
-  OpPRINTIState := TDFAState.Create('PRINTI', 'PRINTI', @self.VM_OpPRINTI);
+  OpPRINTIHState := TDFAState.Create('PRINTIH', 'PRINTIH', @self.VM_OpNone);
+  OpPRINTHOIState := TDFAState.Create('PRINTHOI', 'PRINTHOI', @self.VM_OpPRINTHOI);
+  OpPRINTCStartState := TDFAState.Create('PRINTCStart', 'PRINTCStart', @self.VM_OpNone);
+  OpPRINTCHState := TDFAState.Create('PRINTCH', 'PRINTCH', @self.VM_OpNone);
+  OpPRINTHOCState := TDFAState.Create('PRINTHOC', 'PRINTHOC', @self.VM_OpPRINTHOC);
 
   self.FDfa.AddState(StartState);
   self.FDfa.AddState(CommentState);
@@ -169,7 +183,11 @@ begin
   self.FDfa.AddState(OpMOVHHBState);
   self.FDfa.AddState(OpMOVHHBxState);
   self.FDfa.AddState(OpPRINTIStartState);
-  self.FDfa.AddState(OpPRINTIState);
+  self.FDfa.AddState(OpPRINTIHState);
+  self.FDfa.AddState(OpPRINTHOIState);
+  self.FDfa.AddState(OpPRINTCStartState);
+  self.FDfa.AddState(OpPRINTCHState);
+  self.FDfa.AddState(OpPRINTHOCState);
 
   (* All OP Codes *)
   StartState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexOp)), OpStartState, False, True));
@@ -180,6 +198,8 @@ begin
   (* Branch each OP Code By Name *)
   OpStartState.AddDelta(TDFADelta.Create(TDFAComp_ValIs.Create('HALT'), OpHALTState));
   OpStartState.AddDelta(TDFADelta.Create(TDFAComp_ValIs.Create('MOV'), OpMOVStartState));
+  OpStartState.AddDelta(TDFADelta.Create(TDFAComp_ValIs.Create('PRINTI'), OpPRINTIStartState));
+  OpStartState.AddDelta(TDFADelta.Create(TDFAComp_ValIs.Create('PRINTC'), OpPRINTCStartState));
 
   (* MOVH* OP Codes *)
   OpMOVStartState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexAddr)), OpMOVHState, False));
@@ -193,8 +213,13 @@ begin
   OpMOVHHState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexHexLit)), OpMOVHHBState));
   OpMOVHHBState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexHexLit)), OpMOVHHBxState));
 
+  (* PRINTHOI *)
+  OpPRINTIStartState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexAddr)), OpPRINTIHState, False));
+  OpPRINTIHState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexHexLit)), OpPRINTHOIState));
 
-
+  (* PRINTHOC *)
+  OpPRINTCStartState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexAddr)), OpPRINTCHState, False));
+  OpPRINTCHState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexHexLit)), OpPRINTHOCState));
 
 end;
 
