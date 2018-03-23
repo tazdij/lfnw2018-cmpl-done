@@ -7,7 +7,6 @@
       <Unit0>
         <Filename Value="cmpl.lpr"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="37"/>
         <CursorPos X="22" Y="63"/>
         <UsageCount Value="246"/>
         <Loaded Value="True"/>
@@ -16,7 +15,7 @@
         <Filename Value="chardfa.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="361"/>
+        <TopLine Value="515"/>
         <CursorPos X="7" Y="361"/>
         <UsageCount Value="246"/>
         <Loaded Value="True"/>
@@ -51,10 +50,12 @@
       <Unit5>
         <Filename Value="nslex.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="219"/>
-        <CursorPos X="23" Y="241"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="86"/>
+        <CursorPos X="49" Y="94"/>
         <UsageCount Value="246"/>
+        <Loaded Value="True"/>
       </Unit5>
       <Unit6>
         <Filename Value="unixlazutf8.inc"/>
@@ -77,9 +78,7 @@
       <Unit8>
         <Filename Value="booty.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="62"/>
         <CursorPos X="27" Y="93"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
@@ -96,7 +95,6 @@
         <Filename Value="lexdfa.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="623"/>
         <CursorPos X="13" Y="640"/>
         <UsageCount Value="235"/>
         <Loaded Value="True"/>
