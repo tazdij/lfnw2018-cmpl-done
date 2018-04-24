@@ -18,6 +18,7 @@ type
         public
 
             procedure WriteByte(AInput : Byte);
+            procedure WriteBytePos(AInput : Byte; APos : Cardinal);
             procedure WriteHexStrBEtoLE(AInput : AnsiString; AFixedSize : Boolean = True; ASizeBytes : Byte = 4);
             procedure WriteHexStrLEtoBE(AInput : AnsiString; AFixedSize : Boolean = True; ASizeBytes : Byte = 4);
             procedure WriteHexStr(AInput : AnsiString; AFixedSize : Boolean = True; ASizeBytes : Byte = 4);
@@ -30,6 +31,8 @@ type
 
             constructor Create();
             destructor Destroy(); override;
+
+            property BytePos : Cardinal read FBytePos;
     end;
 
 implementation
@@ -43,6 +46,11 @@ begin
   self.FBytes[i] := AInput;
 
   self.FBytePos := i;
+end;
+
+procedure TBinGen.WriteBytePos(AInput : Byte; APos : Cardinal);
+begin
+  self.FBytes[APos] := AInput;
 end;
 
 procedure TBinGen.WriteHexStrBEtoLE(AInput : AnsiString; AFixedSize : Boolean = True; ASizeBytes : Byte = 4);
