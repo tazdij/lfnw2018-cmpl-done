@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="9"/>
+    <Version Value="10"/>
     <General>
       <Flags>
         <MainUnitHasCreateFormStatements Value="False"/>
@@ -44,6 +44,7 @@
       <Unit3>
         <Filename Value="lazutf8.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="LazUTF8"/>
       </Unit3>
       <Unit4>
         <Filename Value="lazutils_defines.inc"/>

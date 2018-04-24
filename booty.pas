@@ -44,6 +44,10 @@ type
       procedure VM_OpMOVHIl(ADfaTokens : TDFATokenArray);
       procedure VM_OpMOVHHBx(ADfaTokens : TDFATokenArray);
 
+      procedure VM_OpPUSHI(ADfaTokens : TDFATokenArray);
+
+      procedure VM_OpARGRI(ADfaTokens : TDFATokenArray);
+
       procedure VM_OpCALL_A(ADfaTokens : TDFATokenArray);
 
       procedure VM_OpPRINTHOI(ADfaTokens : TDFATokenArray);
@@ -66,8 +70,10 @@ implementation
 procedure TLfnwParseGen.VM_LabelDef(ADfaTokens : TDFATokenArray);
 var addr : Cardinal;
 begin
+  //WriteLn('LABELDEF. ' + IntToStr(Length(ADfaTokens)));
   // Get the address of next instruction
-  addr := self.FBinGen.BytePos;
+  addr := self.FBinGen.BytePos + 1;
+  WriteLn('LABELDEF. ' + IntToStr(addr));
   self.AddLabel(ADfaTokens[0].TokenVal, addr);
 end;
 
@@ -86,7 +92,7 @@ var i : LongInt = 0;
 begin
   Result := 0;
 
-  for i := 0 to Length(self.FLabels) do
+  for i := 0 to Length(self.FLabels) - 1 do
   begin
     if AnsiCompareStr(ALabelName, self.FLabels[i].LabelName) = 0 then
     begin
@@ -113,7 +119,7 @@ var i : LongInt;
 
 begin
   Result := 0;
-  for i := 0 to Length(self.FLabelDefers) do
+  for i := 0 to Length(self.FLabelDefers) - 1 do
   begin
     if AnsiCompareStr(ALabelName, self.FLabelDefers[i].LabelName) = 0 then
     begin
@@ -158,6 +164,24 @@ begin
   self.FBinGen.WriteHexStrBEtoLE(ADfaTokens[3].TokenVal);
 end;
 
+procedure TLfnwParseGen.VM_OpPUSHI(ADfaTokens : TDFATokenArray);
+begin
+  self.FBinGen.WriteByte(10);
+  self.FBinGen.WriteHexStrBEtoLE(ADfaTokens[1].TokenVal);
+
+  WriteLn('PUSHI. ' + ADfaTokens[1].TokenVal);
+end;
+
+procedure TLfnwParseGen.VM_OpARGRI(ADfaTokens : TDFATokenArray);
+begin
+
+  self.FBinGen.WriteByte(90);
+  self.FBinGen.WriteByte(StrToInt(RightStr(ADfaTokens[1].TokenVal, Length(ADfaTokens[1].TokenVal) - 1)));
+  self.FBinGen.WriteHexStrBEtoLE(ADfaTokens[2].TokenVal);
+
+  WriteLn('ARGI. 90 ' + RightStr(ADfaTokens[1].TokenVal, Length(ADfaTokens[1].TokenVal) - 1) + ' ' + ADfaTokens[2].TokenVal);
+end;
+
 procedure TLfnwParseGen.VM_OpCALL_A(ADfaTokens : TDFATokenArray);
 begin
   WriteLn('CALL');
@@ -167,7 +191,7 @@ begin
   if ADfaTokens[1].TokenId = Integer(ELfnwLexLabel) then
   begin
       // Add a defer with this address
-      self.AddLabelDefer(ADfaTokens[1].TokenVal, self.FBinGen.BytePos);
+      self.AddLabelDefer(ADfaTokens[1].TokenVal, self.FBinGen.BytePos + 1);
 
       // Write in 32bit 0
       self.FBinGen.WriteHexStrBEtoLE('00');
@@ -197,6 +221,7 @@ var numTokens : Integer = 0;
     lastToken, curToken : PLfnwLexToken;
     reprocessToken : Boolean;
     tmpDFAToken : TDFAToken;
+    i : LongInt;
 begin
   curToken := @ATokens[0];
   lastToken:= curToken + Length(ATokens);
@@ -224,6 +249,10 @@ begin
 
   // TODO: Loop all TLfnwLabelDefer
   //       Replace 0 with actual address of label
+  for i := 0 to Length(self.FLabelDefers) - 1 do
+  begin
+    self.FBinGen.WriteBytePos(self.GetLabelAddr(self.FLabelDefers[i].LabelName), self.FLabelDefers[i].SourcePos);
+  end;
 
   self.FBinGen.SaveFile('test.bin');
 
@@ -238,6 +267,10 @@ var
     OpMOVStartState, OpMOVRState, OpMOVRIlState,
     OpMOVHState, OpMOVHState2, OpMOVHIlState,
     OpMOVHHState, OpMOVHHBState, OpMOVHHBxState,
+
+    OpPUSHIStartState, opPUSHIState,
+
+    OpARGStartState, OpARGRState, OpARGRIState, OpARGRIEndState,
 
     OpCALLState, OpCALLLabelState, OpCallArgsState,
 
@@ -266,6 +299,16 @@ begin
   OpMOVHHState := TDFAState.Create('MOVHH', 'MOVHH', @self.VM_OpNone);
   OpMOVHHBState := TDFAState.Create('MOVHHB', 'MOVHHB', @self.VM_OpNone);
   OpMOVHHBxState := TDFAState.Create('MOVHHBx', 'MOVHHBx', @self.VM_OpMOVHHBx);
+
+  OpPUSHIStartState := TDFAState.Create('PUSHI', 'PUSHI', @self.VM_OpPUSHI);
+  OpPUSHIState := TDFAState.Create('PUSHIl', 'PUSHIl', @self.VM_OpPUSHI);
+
+  OpARGStartState := TDFAState.Create('ARGRI', 'ARGRI', @self.VM_OpARGRI);
+  OpARGRState := TDFAState.Create('ARGRI', 'ARGRI', @self.VM_OpARGRI);
+  OpARGRIState:= TDFAState.Create('ARGRI', 'ARGRI', @self.VM_OpARGRI);
+  OpARGRIEndState:= TDFAState.Create('ARGRI', 'ARGRI', @self.VM_OpARGRI);
+
+
   OpPRINTIStartState := TDFAState.Create('PRINTIStart', 'PRINTIStart', @self.VM_OpNone);
   OpPRINTIHState := TDFAState.Create('PRINTIH', 'PRINTIH', @self.VM_OpNone);
   OpPRINTHOIState := TDFAState.Create('PRINTHOI', 'PRINTHOI', @self.VM_OpPRINTHOI);
@@ -277,6 +320,7 @@ begin
   OpCALLState := TDFAState.Create('CALL', 'CALL', @self.VM_OpCALL_A);
   OpCALLLabelState := TDFAState.Create('CALL', 'CALL', @self.VM_OpCALL_A);
   OpCALLArgsState := TDFAState.Create('CALL', 'CALL', @self.VM_OpCALL_A);
+
 
   self.FDfa.AddState(StartState);
   self.FDfa.AddState(CommentState);
@@ -292,6 +336,15 @@ begin
   self.FDfa.AddState(OpMOVHHState);
   self.FDfa.AddState(OpMOVHHBState);
   self.FDfa.AddState(OpMOVHHBxState);
+
+  self.FDfa.AddState(OpPUSHIStartState);
+  self.FDfa.AddState(OpPUSHIState);
+
+  self.FDfa.AddState(OpARGStartState);
+  self.FDfa.AddState(OpARGRState);
+  self.FDfa.AddState(OpARGRIState);
+  self.FDfa.AddState(OpARGRIEndState);
+
   self.FDfa.AddState(OpPRINTIStartState);
   self.FDfa.AddState(OpPRINTIHState);
   self.FDfa.AddState(OpPRINTHOIState);
@@ -315,9 +368,11 @@ begin
   (* Branch each OP Code By Name *)
   OpStartState.AddDelta(TDFADelta.Create(TDFAComp_ValIs.Create('HALT'), OpHALTState));
   OpStartState.AddDelta(TDFADelta.Create(TDFAComp_ValIs.Create('MOV'), OpMOVStartState));
+  OpStartState.AddDelta(TDFADelta.Create(TDFAComp_ValIs.Create('ARGI'), OpARGStartState));
   OpStartState.AddDelta(TDFADelta.Create(TDFAComp_ValIs.Create('PRINTI'), OpPRINTIStartState));
   OpStartState.AddDelta(TDFADelta.Create(TDFAComp_ValIs.Create('PRINTC'), OpPRINTCStartState));
   OpStartState.AddDelta(TDFADelta.Create(TDFAComp_ValIs.Create('CALL'), OpCALLState));
+  OpStartState.AddDelta(TDFADelta.Create(TDFAComp_ValIs.Create('PUSHI'), OpPUSHIStartState));
 
   (* MOVH* OP Codes *)
   OpMOVStartState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexAddr)), OpMOVHState, False));
@@ -330,6 +385,14 @@ begin
   OpMOVHState2.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexAddr)), OpMOVHHState, False));
   OpMOVHHState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexHexLit)), OpMOVHHBState));
   OpMOVHHBState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexHexLit)), OpMOVHHBxState));
+
+  (* PUSHI Delta *)
+  OpPUSHIStartState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexHexLit)), opPUSHIState));
+
+  (* ARGRI Delta *)
+  OpARGStartState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexReg)), OpARGRState));
+  OpARGRState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexHexLit)), OpARGRIState));
+  //OpARGRState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexHexLit)), OpARGRIState));
 
   (* PRINTHOI *)
   OpPRINTIStartState.AddDelta(TDFADelta.Create(TDFAComp_TypeIs.Create(Integer(ELfnwLexAddr)), OpPRINTIHState, False));

@@ -93,9 +93,9 @@ begin
     CommentState := TDFAState.Create('COMMENT', 'CMNT', Integer(ELfnwLexComment));
     CommentEndState := TDFAState.Create('COMMENT', 'CMNT', Integer(ELfnwLexComment));
 
-    RegisterState := TDFAState.Create('REGISTER', 'REGISTER', Integer(ELfnwLexAddr));
-    RegisterNumberState := TDFAState.Create('REGISTER', 'REGISTER', Integer(ELfnwLexAddr));
-    RegisterEndState := TDFAState.Create('REGISTER', 'REGISTER', Integer(ELfnwLexAddr));
+    RegisterState := TDFAState.Create('REGISTER', 'REGISTER', Integer(ELfnwLexReg));
+    RegisterNumberState := TDFAState.Create('REGISTER', 'REGISTER', Integer(ELfnwLexReg));
+    RegisterEndState := TDFAState.Create('REGISTER', 'REGISTER', Integer(ELfnwLexReg));
 
     OpState := TDFAState.Create('OP', 'OP', Integer(ELfnwLexOp));
     OpEndState := TDFAState.Create('OP', 'OP', Integer(ELfnwLexOp));

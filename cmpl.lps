@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectSession>
-    <Version Value="9"/>
+    <Version Value="10"/>
     <BuildModes Active="Default"/>
     <Units Count="11">
       <Unit0>
@@ -15,7 +15,7 @@
       <Unit1>
         <Filename Value="chardfa.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="187"/>
         <CursorPos X="7" Y="361"/>
         <UsageCount Value="246"/>
@@ -33,11 +33,12 @@
       <Unit3>
         <Filename Value="lazutf8.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
+        <UnitName Value="LazUTF8"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="3297"/>
+        <CursorPos Y="3316"/>
         <UsageCount Value="246"/>
+        <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="lazutils_defines.inc"/>
@@ -51,9 +52,9 @@
       <Unit5>
         <Filename Value="nslex.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
-        <TopLine Value="62"/>
-        <CursorPos X="45" Y="110"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="71"/>
+        <CursorPos X="85" Y="98"/>
         <UsageCount Value="246"/>
         <Loaded Value="True"/>
       </Unit5>
@@ -80,25 +81,25 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="204"/>
-        <CursorPos X="62" Y="211"/>
+        <TopLine Value="151"/>
+        <CursorPos X="36" Y="174"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit8>
       <Unit9>
         <Filename Value="bingen.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="29"/>
-        <CursorPos X="64" Y="51"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="30"/>
+        <CursorPos Y="102"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit9>
       <Unit10>
         <Filename Value="lexdfa.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="690"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="199"/>
         <CursorPos Y="722"/>
         <UsageCount Value="235"/>
         <Loaded Value="True"/>
@@ -107,135 +108,134 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="booty.pas"/>
-        <Caret Line="186" TopLine="168"/>
+        <Caret Line="225" TopLine="204"/>
       </Position1>
       <Position2>
         <Filename Value="booty.pas"/>
-        <Caret Line="250" TopLine="247"/>
+        <Caret Line="228" TopLine="204"/>
       </Position2>
       <Position3>
-        <Filename Value="booty.pas"/>
-        <Caret Line="138" TopLine="120"/>
+        <Filename Value="lexdfa.pas"/>
+        <Caret Line="703" TopLine="688"/>
       </Position3>
       <Position4>
-        <Filename Value="booty.pas"/>
-        <Caret Line="141" TopLine="120"/>
+        <Filename Value="lexdfa.pas"/>
+        <Caret Line="705" TopLine="688"/>
       </Position4>
       <Position5>
-        <Filename Value="booty.pas"/>
-        <Caret Line="142" TopLine="120"/>
+        <Filename Value="lexdfa.pas"/>
+        <Caret Line="708" TopLine="688"/>
       </Position5>
       <Position6>
-        <Filename Value="booty.pas"/>
-        <Caret Line="145" TopLine="120"/>
+        <Filename Value="lexdfa.pas"/>
+        <Caret Line="722" TopLine="688"/>
       </Position6>
       <Position7>
         <Filename Value="booty.pas"/>
-        <Caret Line="148" TopLine="120"/>
+        <Caret Line="233" TopLine="204"/>
       </Position7>
       <Position8>
         <Filename Value="booty.pas"/>
-        <Caret Line="151" Column="3" TopLine="121"/>
+        <Caret Line="234" TopLine="204"/>
       </Position8>
       <Position9>
         <Filename Value="booty.pas"/>
-        <Caret Line="138" TopLine="121"/>
+        <Caret Line="220" TopLine="204"/>
       </Position9>
       <Position10>
         <Filename Value="booty.pas"/>
-        <Caret Line="141" TopLine="121"/>
+        <Caret Line="222" TopLine="204"/>
       </Position10>
       <Position11>
         <Filename Value="booty.pas"/>
-        <Caret Line="142" TopLine="121"/>
+        <Caret Line="223" TopLine="204"/>
       </Position11>
       <Position12>
         <Filename Value="booty.pas"/>
-        <Caret Line="145" TopLine="121"/>
+        <Caret Line="224" TopLine="204"/>
       </Position12>
       <Position13>
         <Filename Value="booty.pas"/>
-        <Caret Line="79" TopLine="62"/>
+        <Caret Line="225" TopLine="204"/>
       </Position13>
       <Position14>
         <Filename Value="booty.pas"/>
-        <Caret Line="80" TopLine="62"/>
+        <Caret Line="228" TopLine="204"/>
       </Position14>
       <Position15>
-        <Filename Value="booty.pas"/>
-        <Caret Line="82" TopLine="62"/>
+        <Filename Value="lexdfa.pas"/>
+        <Caret Line="703" TopLine="688"/>
       </Position15>
       <Position16>
-        <Filename Value="booty.pas"/>
-        <Caret Line="84" TopLine="62"/>
+        <Filename Value="lexdfa.pas"/>
+        <Caret Line="615" TopLine="597"/>
       </Position16>
       <Position17>
-        <Filename Value="booty.pas"/>
-        <Caret Line="148" TopLine="131"/>
+        <Filename Value="lexdfa.pas"/>
+        <Caret Line="616" TopLine="597"/>
       </Position17>
       <Position18>
-        <Filename Value="booty.pas"/>
-        <Caret Line="151" TopLine="131"/>
+        <Filename Value="lexdfa.pas"/>
+        <Caret Line="618" TopLine="597"/>
       </Position18>
       <Position19>
-        <Filename Value="booty.pas"/>
-        <Caret Line="153" TopLine="131"/>
+        <Filename Value="lexdfa.pas"/>
+        <Caret Line="620" TopLine="606"/>
       </Position19>
       <Position20>
-        <Filename Value="booty.pas"/>
-        <Caret Line="85" Column="59" TopLine="67"/>
+        <Filename Value="lexdfa.pas"/>
+        <Caret Line="649" TopLine="632"/>
       </Position20>
       <Position21>
-        <Filename Value="booty.pas"/>
-        <Caret Line="88" Column="3" TopLine="82"/>
+        <Filename Value="lexdfa.pas"/>
+        <Caret Line="705" TopLine="686"/>
       </Position21>
       <Position22>
-        <Filename Value="booty.pas"/>
-        <Caret Line="70" TopLine="59"/>
+        <Filename Value="lexdfa.pas"/>
+        <Caret Line="722" TopLine="688"/>
       </Position22>
       <Position23>
-        <Filename Value="booty.pas"/>
-        <Caret Line="71" TopLine="59"/>
+        <Filename Value="nslex.pas"/>
+        <Caret Line="98" Column="85" TopLine="71"/>
       </Position23>
       <Position24>
         <Filename Value="booty.pas"/>
-        <Caret Line="77" Column="49" TopLine="80"/>
+        <Caret Line="73" TopLine="55"/>
       </Position24>
       <Position25>
         <Filename Value="booty.pas"/>
-        <Caret Line="70" TopLine="80"/>
+        <Caret Line="167" TopLine="149"/>
       </Position25>
       <Position26>
         <Filename Value="booty.pas"/>
-        <Caret Line="71" TopLine="54"/>
+        <Caret Line="168" TopLine="149"/>
       </Position26>
       <Position27>
         <Filename Value="booty.pas"/>
-        <Caret Line="72" TopLine="54"/>
+        <Caret Line="169" Column="104" TopLine="151"/>
       </Position27>
       <Position28>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="713" TopLine="690"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="167" TopLine="151"/>
       </Position28>
       <Position29>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="716" TopLine="690"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="168" TopLine="151"/>
       </Position29>
       <Position30>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="722" TopLine="690"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="169" Column="49" TopLine="151"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>
   <Debugging>
-    <BreakPoints Count="1">
+    <Watches Count="2">
       <Item1>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="booty.pas"/>
-        <Line Value="70"/>
+        <Expression Value="self.FLabels"/>
       </Item1>
-    </BreakPoints>
+      <Item2>
+        <Expression Value="self.FLabelDefers"/>
+      </Item2>
+    </Watches>
   </Debugging>
 </CONFIG>
