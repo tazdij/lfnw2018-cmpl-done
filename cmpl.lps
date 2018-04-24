@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectSession>
-    <Version Value="9"/>
+    <Version Value="10"/>
     <BuildModes Active="Default"/>
     <Units Count="11">
       <Unit0>
@@ -15,7 +15,7 @@
         <Filename Value="chardfa.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="515"/>
+        <TopLine Value="492"/>
         <CursorPos X="7" Y="361"/>
         <UsageCount Value="246"/>
         <Loaded Value="True"/>
@@ -50,10 +50,9 @@
       <Unit5>
         <Filename Value="nslex.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="86"/>
-        <CursorPos X="49" Y="94"/>
+        <TopLine Value="142"/>
+        <CursorPos X="45" Y="110"/>
         <UsageCount Value="246"/>
         <Loaded Value="True"/>
       </Unit5>
@@ -78,8 +77,10 @@
       <Unit8>
         <Filename Value="booty.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos X="27" Y="93"/>
+        <TopLine Value="5"/>
+        <CursorPos X="47" Y="28"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit8>
@@ -95,6 +96,7 @@
         <Filename Value="lexdfa.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="3"/>
+        <TopLine Value="37"/>
         <CursorPos X="13" Y="640"/>
         <UsageCount Value="235"/>
         <Loaded Value="True"/>

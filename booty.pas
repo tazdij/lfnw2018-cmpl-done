@@ -15,10 +15,17 @@ type
     LabelPos : Cardinal;
   end;
 
+  PLfnwLabelDefer = ^TLfnwLabelDefer;
+  TLfnwLabelDefer = record
+    SourcePos : Cardinal;
+    LabelName : AnsiString;
+  end;
+
 
   TLfnwParseGen = class(TObject)
     private
       FLabels : Array of TLfnwLabel;
+      FLabelDefers : Array of TLfnwLabelDefer;
 
       FBinGen : TBinGen;
       FDfa : TLexDFA;
@@ -28,6 +35,8 @@ type
       procedure VM_OpMOVRIl(ADfaTokens : TDFATokenArray);
       procedure VM_OpMOVHIl(ADfaTokens : TDFATokenArray);
       procedure VM_OpMOVHHBx(ADfaTokens : TDFATokenArray);
+
+      procedure VM_OpCALL_A(ADfaTokens : TDFATokenArray);
 
       procedure VM_OpPRINTHOI(ADfaTokens : TDFATokenArray);
       procedure VM_OpPRINTHOC(ADfaTokens : TDFATokenArray);
@@ -79,6 +88,14 @@ begin
   self.FBinGen.WriteHexStrBEtoLE(ADfaTokens[3].TokenVal);
 end;
 
+procedure TLfnwParseGen.VM_OpCALL_A(ADfaTokens : TDFATokenArray);
+begin
+  WriteLn('CALL');
+
+  // Get the
+
+end;
+
 (* Handle PRINT *)
 procedure TLfnwParseGen.VM_OpPRINTHOI(ADfaTokens : TDFATokenArray);
 begin
@@ -123,6 +140,9 @@ begin
         Inc(curToken);
 
   end;
+
+  // TODO: Loop all TLfnwLabelDefer
+  //       Replace 0 with actual address of label
 
   self.FBinGen.SaveFile('test.bin');
 
