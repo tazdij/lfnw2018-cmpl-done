@@ -30,6 +30,9 @@ type
       FBinGen : TBinGen;
       FDfa : TLexDFA;
 
+      procedure AddLabelDefer(ALabelName : AnsiString; ASourcePos : Cardinal);
+      procedure
+
       procedure VM_OpNone(ADfaTokens : TDFATokenArray);
       procedure VM_OpHALT(ADfaTokens : TDFATokenArray);
       procedure VM_OpMOVRIl(ADfaTokens : TDFATokenArray);
@@ -54,6 +57,11 @@ type
   end;
 
 implementation
+
+procedure AddLabelDefer(ALabelName : AnsiString; ASourcePos : Cardinal);
+begin
+
+end;
 
 procedure TLfnwParseGen.VM_OpNone(ADfaTokens : TDFATokenArray);
 begin
@@ -92,7 +100,7 @@ procedure TLfnwParseGen.VM_OpCALL_A(ADfaTokens : TDFATokenArray);
 begin
   WriteLn('CALL');
 
-  // Get the
+  //
 
 end;
 
