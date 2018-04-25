@@ -44,6 +44,8 @@ type
       procedure VM_OpMOVHIl(ADfaTokens : TDFATokenArray);
       procedure VM_OpMOVHHBx(ADfaTokens : TDFATokenArray);
 
+      procedure VM_OpADDRRI(ADfaTokens : TDFATokenArray);
+
       procedure VM_OpPUSHI(ADfaTokens : TDFATokenArray);
 
       procedure VM_OpARGRI(ADfaTokens : TDFATokenArray);
@@ -134,6 +136,19 @@ end;
 procedure TLfnwParseGen.VM_OpNone(ADfaTokens : TDFATokenArray);
 begin
   WriteLn('None');
+end;
+
+procedure TLfnwParseGen.VM_OpADDRRI(ADfaTokens : TDFATokenArray);
+var LReg : Byte;
+    RReg : Byte;
+    Res : LongInt;
+begin
+  WriteLn('ADDI.');
+  LReg := Byte(RightStr(ADfaTokens[1].TokenVal, Length(ADfaTokens[1].TokenVal) - 1));
+  RReg := Byte(RightStr(ADfaTokens[2].TokenVal, Length(ADfaTokens[2].TokenVal) - 1));
+
+
+
 end;
 
 procedure TLfnwParseGen.VM_OpHALT(ADfaTokens : TDFATokenArray);

@@ -1,6 +1,7 @@
 ; Should the source fix endianess?
 ; FEED = ED FE 00 00 ; in memory
 
+;; Call to Main Function
 CALL    main    x00
 
 MOV     @x0100  xFEED           ; jksljflkjdslkajfdlksa f
@@ -14,7 +15,9 @@ HALT
 add_i:
     ARGI    R1  x01
     ARGI    R2  x02
-    ; ADDI    R1  R2
+    ADDI    R1  R2
+    PUSHI   R1
+    RET     x01
     
 main:
     PUSHI   x40
