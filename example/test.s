@@ -12,17 +12,18 @@ CALL    main    x00
 HALT
 
 
-;add_i:
-;    ARGI    R1  x01
-;    ARGI    R2  x02
-;    ADDI    R1  R2
+add_i:
+    ARGI    R1  x01
+    ARGI    R5  x02
+    ADDI    R1  R5
 ;    PUSHI   R1
-;    RET     x01
+    RET     x00
 
 
 main:
     PUSHI   x40
     PUSHI   x01
+    CALL    add_i   x02
     RET     x00
 ;    CALL    add_i   x02
 ;    POPI    R1          ; Get the result from the stack into a register
