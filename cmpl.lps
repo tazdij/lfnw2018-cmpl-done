@@ -7,8 +7,8 @@
       <Unit0>
         <Filename Value="cmpl.lpr"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="37"/>
-        <CursorPos Y="63"/>
+        <TopLine Value="11"/>
+        <CursorPos X="33" Y="60"/>
         <UsageCount Value="246"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -81,8 +81,8 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="151"/>
-        <CursorPos X="36" Y="174"/>
+        <TopLine Value="277"/>
+        <CursorPos X="74" Y="283"/>
         <UsageCount Value="210"/>
         <Loaded Value="True"/>
       </Unit8>
@@ -108,123 +108,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="booty.pas"/>
-        <Caret Line="225" TopLine="204"/>
+        <Caret Line="341" Column="16" TopLine="312"/>
       </Position1>
       <Position2>
         <Filename Value="booty.pas"/>
-        <Caret Line="228" TopLine="204"/>
+        <Caret Line="342" Column="16" TopLine="313"/>
       </Position2>
       <Position3>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="703" TopLine="688"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="343" Column="16" TopLine="314"/>
       </Position3>
       <Position4>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="705" TopLine="688"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="344" Column="16" TopLine="315"/>
       </Position4>
       <Position5>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="708" TopLine="688"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="345" Column="16" TopLine="316"/>
       </Position5>
       <Position6>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="722" TopLine="688"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="346" Column="16" TopLine="317"/>
       </Position6>
       <Position7>
         <Filename Value="booty.pas"/>
-        <Caret Line="233" TopLine="204"/>
+        <Caret Line="347" Column="16" TopLine="318"/>
       </Position7>
       <Position8>
         <Filename Value="booty.pas"/>
-        <Caret Line="234" TopLine="204"/>
+        <Caret Line="348" Column="16" TopLine="319"/>
       </Position8>
       <Position9>
         <Filename Value="booty.pas"/>
-        <Caret Line="220" TopLine="204"/>
+        <Caret Line="349" Column="16" TopLine="320"/>
       </Position9>
       <Position10>
         <Filename Value="booty.pas"/>
-        <Caret Line="222" TopLine="204"/>
+        <Caret Line="350" Column="16" TopLine="321"/>
       </Position10>
       <Position11>
         <Filename Value="booty.pas"/>
-        <Caret Line="223" TopLine="204"/>
+        <Caret Line="351" Column="16" TopLine="322"/>
       </Position11>
       <Position12>
         <Filename Value="booty.pas"/>
-        <Caret Line="224" TopLine="204"/>
+        <Caret Line="352" Column="16" TopLine="323"/>
       </Position12>
       <Position13>
         <Filename Value="booty.pas"/>
-        <Caret Line="225" TopLine="204"/>
+        <Caret Line="353" Column="16" TopLine="324"/>
       </Position13>
       <Position14>
         <Filename Value="booty.pas"/>
-        <Caret Line="228" TopLine="204"/>
+        <Caret Line="354" Column="16" TopLine="325"/>
       </Position14>
       <Position15>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="703" TopLine="688"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="356" Column="16" TopLine="327"/>
       </Position15>
       <Position16>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="615" TopLine="597"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="357" Column="16" TopLine="328"/>
       </Position16>
       <Position17>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="616" TopLine="597"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="359" Column="16" TopLine="330"/>
       </Position17>
       <Position18>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="618" TopLine="597"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="360" Column="16" TopLine="331"/>
       </Position18>
       <Position19>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="620" TopLine="606"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="361" Column="16" TopLine="332"/>
       </Position19>
       <Position20>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="649" TopLine="632"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="362" Column="16" TopLine="333"/>
       </Position20>
       <Position21>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="705" TopLine="686"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="364" Column="16" TopLine="335"/>
       </Position21>
       <Position22>
-        <Filename Value="lexdfa.pas"/>
-        <Caret Line="722" TopLine="688"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="365" Column="16" TopLine="336"/>
       </Position22>
       <Position23>
-        <Filename Value="nslex.pas"/>
-        <Caret Line="98" Column="85" TopLine="71"/>
+        <Filename Value="booty.pas"/>
+        <Caret Line="366" Column="16" TopLine="337"/>
       </Position23>
       <Position24>
         <Filename Value="booty.pas"/>
-        <Caret Line="73" TopLine="55"/>
+        <Caret Line="367" Column="16" TopLine="338"/>
       </Position24>
       <Position25>
         <Filename Value="booty.pas"/>
-        <Caret Line="167" TopLine="149"/>
+        <Caret Line="368" Column="16" TopLine="339"/>
       </Position25>
       <Position26>
         <Filename Value="booty.pas"/>
-        <Caret Line="168" TopLine="149"/>
+        <Caret Line="369" Column="16" TopLine="340"/>
       </Position26>
       <Position27>
         <Filename Value="booty.pas"/>
-        <Caret Line="169" Column="104" TopLine="151"/>
+        <Caret Line="424" Column="109" TopLine="411"/>
       </Position27>
       <Position28>
         <Filename Value="booty.pas"/>
-        <Caret Line="167" TopLine="151"/>
+        <Caret Line="298" Column="32" TopLine="330"/>
       </Position28>
       <Position29>
         <Filename Value="booty.pas"/>
-        <Caret Line="168" TopLine="151"/>
+        <Caret Line="333" Column="11" TopLine="315"/>
       </Position29>
       <Position30>
         <Filename Value="booty.pas"/>
-        <Caret Line="169" Column="49" TopLine="151"/>
+        <Caret Line="375" Column="30" TopLine="357"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>
